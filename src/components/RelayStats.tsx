@@ -56,7 +56,7 @@ export default function RelayStats({
   const stats = useRelayStats(urls, filter);
 
   return (
-    <div className={`flex flex-wrap items-center gap-1.5 ${className}`}>
+    <div className={`flex flex-col gap-1.5 ${className}`}>
       {urls.map((url) => {
         const s = stats.get(url);
         const status = s?.status ?? "idle";
@@ -68,13 +68,15 @@ export default function RelayStats({
           <div
             key={url}
             title={`${url} — ${statusLabel(status)}${info?.software ? ` · ${info.software.split("/").pop()}${info.version ? ` v${info.version}` : ""}` : ""}`}
-            className="flex items-center gap-1.5 px-2 py-0.5 border border-border/60 rounded bg-card/40"
+            className="flex items-center gap-2 text-[11px]"
           >
             <span
               className={`inline-block w-1.5 h-1.5 rounded-full shrink-0 ${statusColor(status)}`}
               aria-label={statusLabel(status)}
             />
-            <span className="font-mono text-[10px] text-foreground/85">{domain}</span>
+            <span className="font-mono text-foreground/85 flex-1 truncate">
+              {domain}
+            </span>
             {readable && (
               <span className="font-mono text-[9px] px-1 border border-primary/50 text-primary/80">
                 READ
@@ -94,7 +96,7 @@ export default function RelayStats({
               </span>
             )}
             {readable && (
-              <span className="font-mono text-[10px] text-muted-foreground/60 tabular-nums">
+              <span className="font-mono text-muted-foreground/60 tabular-nums shrink-0 min-w-[2ch] text-right">
                 {count}
               </span>
             )}

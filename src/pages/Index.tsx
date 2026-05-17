@@ -91,11 +91,19 @@ export default function Index() {
             </span>
           </p>
           {hex && (
-            <RelayStats
-              className="mt-3"
-              urls={DEFAULT_RELAYS}
-              filter={{ kinds: [RELEASE_KIND], authors: [hex] }}
-            />
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-[1.5fr_1fr_1.5fr] gap-3 items-start">
+              <div className="rounded-lg border border-border/60 bg-card/30 p-3">
+                <div className="text-[10px] uppercase tracking-widest text-muted-foreground/60 font-mono mb-2">
+                  relays
+                </div>
+                <RelayStats
+                  urls={DEFAULT_RELAYS}
+                  filter={{ kinds: [RELEASE_KIND], authors: [hex] }}
+                />
+              </div>
+              <StatsSummary releases={releases} />
+              <ProfileHeader profile={profile} npub={OWNER_NPUB} />
+            </div>
           )}
         </div>
 
@@ -105,11 +113,6 @@ export default function Index() {
           </div>
         ) : (
           <>
-            <ProfileHeader
-              profile={profile}
-              npub={OWNER_NPUB}
-              right={<StatsSummary releases={releases} />}
-            />
 
             <FilterBar
               releases={releases}

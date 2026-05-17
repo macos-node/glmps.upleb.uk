@@ -1,6 +1,6 @@
 import NostrLogin from "./NostrLogin";
 
-const SUBS = ["blst", "fx", "glmps", "npub", "pls", "smpl", "trth"] as const;
+const SUBS = ["blst", "glmps", "npub", "pls", "smpl"] as const;
 
 export default function Nav() {
   const host =
