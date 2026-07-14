@@ -1,5 +1,51 @@
 # Changelog
 
+## Viewer behaviour
+
+Read-path fixes. These are *not* contract changes — the wire format is
+untouched — but they change what the viewer renders from the same events, so
+they move in step across both forks.
+
+### 2026-07-14 — surface the release.v2 `video` tag
+
+The `video` tag has been in the vendored, SHA-pinned `release.v2.json` since the
+2026-06-23 genre round (ndisc emits it, count of audio-visual files, only when
+`> 0`), but `parseRelease` never read it — so a release carrying video was
+indistinguishable from an audio-only one. No contract change; this is purely a
+read-path catch-up.
+
+`parseRelease` now reads `video` → `Release.video?: number` (strict-but-recoverable,
+same shape as `tracks`/`discs`). The schema notes the emitter extension-detects
+and may over-count, so **presence is the signal**: a plain `video` facet on the
+card/row and detail subtitle (surfaced at `≥ 1`, no count), with the raw count
+shown only as a richer hint in the detail `video` field. Fixture
+`release-31237-v2.full.json` gains `["video","1"]`; `assert-parse.ts` pins
+`video === 1`. Landed in step across both glmps forks + ndisc.view.
+
+### 2026-07-11 — `a`-tag deletions are not permanent tombstones
+
+A kind:5 deletion carrying an `a` tag was treated as killing the coordinate
+forever: any matching kind:31237 was dropped regardless of timestamp. But the
+coordinate (`kind:pubkey:d`) is **reused every time a release is republished**,
+so an unpublish-then-republish cycle produced a new event that the viewer
+discarded on sight.
+
+ndisc's library was bulk-unpublished and then republished, which leaves a
+deletion in the history of *every* coordinate. The consequence was not a stale
+release or two — as the deletion subscription caught up, the viewer would have
+dropped the **entire catalogue**.
+
+Now strict NIP-09: keep the newest deletion timestamp per coordinate and kill
+only events created at or before it. `e`-tag deletions remain permanent — they
+name one content-addressed event id, which is never reused. Fixed in
+`useReleases` (catalogue), `useReleaseByAddr` (release page) and `lib/feed`
+(kind:31239 notes, which carried the identical bare-`Set` tombstone and would
+have made any republished note invisible).
+
+Publisher-side counterpart: **ndisc v0.1.4-beta.5**, which had the same bug in
+`reconcile_published` and now also sends `e` + `a` on every deletion (see
+`HANDOVER-2026-07-11.md`).
+
 ## Schema contract
 
 The Nostr wire contract with **ndisc** (the desktop publisher) is vendored
