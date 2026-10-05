@@ -4,8 +4,7 @@
 
 set -euo pipefail
 
-SERVER="root@45.154.199.154"
-SSH_PORT="2121"
+SERVER="upleb.uk"   # a Host alias in ~/.ssh/config: the user, port and key live there
 REMOTE_PATH="/var/www/glmps.upleb.uk"
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -16,15 +15,13 @@ npm run build
 
 echo "▸ rsync → $SERVER:$REMOTE_PATH"
 rsync -avz --delete \
-  -e "ssh -p $SSH_PORT" \
   --exclude='.DS_Store' \
   dist/ "$SERVER:$REMOTE_PATH/"
 
-echo "▸ chown www-data"
-ssh -p "$SSH_PORT" "$SERVER" "chown -R www-data:www-data $REMOTE_PATH"
+# No chown: the webroot belongs to the deploy user. Root login is off on the
+# server and sudo asks for a password, so nothing here uses either.
 
 echo "✓ live at https://glmps.upleb.uk"
 echo
-echo "If /r/<naddr> still 404s, install the SPA-fallback vhost:"
-echo "  scp -P $SSH_PORT nginx-glmps.upleb.uk.conf $SERVER:/etc/nginx/sites-available/glmps.upleb.uk"
-echo "  ssh -p $SSH_PORT $SERVER 'nginx -t && systemctl reload nginx'"
+echo "If /r/<naddr> 404s, the vhost has lost its SPA fallback; the copy to"
+echo "install (as root, on the server) is nginx-glmps.upleb.uk.conf."
