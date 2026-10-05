@@ -30,15 +30,18 @@ npm run dev
 ## Build + deploy
 
 ```bash
-npm run build
-rsync -avz --delete -e "ssh -p 2121" dist/ root@45.154.199.154:/var/www/glmps.upleb.uk/
+./deploy.sh
 ```
+
+Builds, then rsyncs `dist/` to the webroot. The script names the server by an
+SSH host alias (`upleb.uk` in `~/.ssh/config`), which carries the user, port and
+key.
 
 > nginx vhost for this site uses an SPA fallback:
 > `location / { try_files $uri $uri/ /index.html; }`
 > so client-side routes resolve.
 
-VPS: `45.154.199.154`. Full server / nginx / SSL / DNS notes for the wider deployment live in the local `code_gh/macos-node/CLAUDE.md` (not pushed; this README is the public-facing summary).
+Server addresses and the nginx / SSL / DNS notes for the wider deployment live in the local `code_gh/macos-node/CLAUDE.md` (not pushed; this README is the public-facing summary).
 
 ---
 
