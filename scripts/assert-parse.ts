@@ -120,6 +120,13 @@ check(
   "v2 2026-11: minimal / abstract / world are known slugs",
   newSlugs?.genres.join(",") === "minimal,abstract,world",
 );
+const round11b = parseRelease(
+  withGenres(["electronic", "krautrock", "post", "contemporary", "gothic"]),
+);
+check(
+  "v2 2026-11b: new genres (krautrock / post / contemporary / gothic) are known slugs",
+  round11b?.genres.join(",") === "electronic,krautrock,post,contemporary,gothic",
+);
 
 if (failed > 0) {
   console.error(`\n  ${failed} conformance check(s) FAILED — parser no longer matches release.v1`);

@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+### release.v2 — 2026-11b genre round, re-vendored 2026-11-07
+
+**Contract:** `release.v2` @ `1c3169bbb4a9333d1597c632c1f8b1681a613712f615bbff40e348caddb32fdf`
+
+- Source: [xjmzx/ndisc](https://github.com/xjmzx/ndisc) `schema/release.v2.json`. SHA-256 `03f312cf…` → `1c3169bb…` (re-pinned in `schema/release.v2.json.sha256`). Additive, **not** a v3 bump: every existing slug is kept.
+- Genre vocabulary 41 → **74 active slugs**, in three groups that replace acoustic / electronic / bridge / tertiary: **electronicDance** (adds bleep, glitch, grime, trip-hop), **otherGenres** (adds alternative, bossa-nova, celtic, choral, country, dancehall, drone, easy-listening, gospel, gothic, grunge, industrial, krautrock, library, punk, ska, swing) and **combining** (adds acoustic, afro, contemporary, hardcore, indian, instrumental, italo, post, proto, psychedelic, roots, synth). Group names are palette + semantic only, never on the wire.
+- `genre.ts`: `GENRE_ACOUSTIC` / `GENRE_ELECTRONIC` / `GENRE_BRIDGE` / `GENRE_TERTIARY` → `GENRE_ELECTRONIC_DANCE` / `GENRE_OTHER` / `GENRE_COMBINING`; `GENRE_ORDER` follows (electronic/dance first). Filters still list only genres present in the data.
+- `index.css` gains the 33 `--c-g-*` triplets (theme-neutral, same in every fork and in ndisc).
+- `assert-parse.ts` checks a sample of the new slugs.
+
 ### release.v2 — 2026-11 genre round, re-vendored 2026-11-05
 
 **Contract:** `release.v2` @ `03f312cfc5f9b4906211de41d7d0142e34330925cd56a8808ed119d4fd34fb42`
